@@ -41,6 +41,4 @@ if [ $stage -le 3 ]; then
     python src/transpose_TE.py -o "trials/$pipeline_dir"
 fi
 
-python results.py
-
 date
