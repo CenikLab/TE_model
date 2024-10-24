@@ -1,5 +1,5 @@
 # TE_model
-This repository contains code supporting the manuscript titled 'xxxx' Included are scripts such as preprocessing ribosome profiling and RNA-seq data for the calculation of translation efficiency, benchmarking with GO terms or hu.MAP terms, and predicting novel gene functions.
+This repository contains code supporting the manuscript titled Translation efficiency covariation across cell types is a conserved organizing principle of mammalian transcriptomes. Included are scripts such as preprocessing ribosome profiling and RNA-seq data for the calculation of translation efficiency, benchmarking with GO terms or hu.MAP terms, and predicting novel gene functions.
 
 ## Overview 
 
