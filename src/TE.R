@@ -22,10 +22,14 @@ print(dim(RIBO))
 
 TE_clr <- function(RIBO, RNA) {
   ### data processing, transfer count to clr
+  ### clr normalization for ribo-seq and RNA-seq
   pr_RIBO <- propr(RIBO, metric = "rho", ivar = "clr", alpha = NA, p = 100)
   pr_RNA <- propr(RNA, metric = "rho", ivar = "clr", alpha = NA, p = 100)
   print("transfer data from clr to ilr")
   ### transfer data from clr to ilr
+  ### This transformation is crucial as it allows the compositional data 
+  ### to be decomposed into an array of uncorrelated variables 
+  ### while preserving relative proportions. 
   RIBO_ilr <- clr2ilr(pr_RIBO@logratio)
   RNA_ilr <- clr2ilr(pr_RNA@logratio)
   RIBO_ilr <- as.data.frame(t(RIBO_ilr))
@@ -39,7 +43,9 @@ TE_clr <- function(RIBO, RNA) {
   # }
   print("calculate proportional regression")
   out <- foreach(i = 1:ncol(RIBO_ilr), .combine = "cbind", .packages = c("compositions")) %dopar% {
+    ### compositional linear regression
     m <- summary(lm(RIBO_ilr[, i] ~ RNA_ilr[, i]))
+    ### define the residuals as TE and transfer the data back to clr
     data.frame(as.numeric(ilr2clr(resid(m))))
   }
 
@@ -51,6 +57,7 @@ human_TE <- TE_clr(RIBO, RNA)
 save(human_TE, file = paste(args[1], "/human_TE_sample_level.rda", sep = ""))
 
 infor <- read.csv("data/infor_filter.csv")
+### merge the TE based on the cell lines and tissues
 df <- merge(infor, t(human_TE), by.x = "experiment_alias", by.y = 0)
 df_cell_line <- df %>%
   group_by(cell_line) %>%

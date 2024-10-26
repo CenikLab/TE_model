@@ -10,6 +10,9 @@ from tqdm import tqdm
 
 NUM_WORKERS = 48
 
+### get the coverage for each sample from ribo file
+### you can generate ribo file from https://academic.oup.com/bioinformatics/article/36/9/2929/5701654
+### Ribo is a function from ribopy library: https://ribosomeprofiling.github.io/ribopy/api_walkthrough.html
 def get_coverage_from_experiment(experiment, study, ribo_dedup, rna_seq_dedup, process_coverage_fn=None, filter=None, rnaseq_fn=None):
     
     # process ribosome profiling data
@@ -21,6 +24,8 @@ def get_coverage_from_experiment(experiment, study, ribo_dedup, rna_seq_dedup, p
     range_lower, range_upper, _ = intevl(ribo_ribo, experiment)
 
     if not process_coverage_fn:
+        ### get the coverage and totol counts from the coding sequence for each transcript
+        ### extract the useable reads from the previous quality control with range_lower and range_upper
         ribo_counts = ribo_ribo.get_region_counts(
             "CDS",
             sum_references=False,

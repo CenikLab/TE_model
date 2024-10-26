@@ -61,12 +61,15 @@ def data_process(df):
 
 #for propotional data (CLR, IQLR)check rare expressed genes with CPM
 def dummy_gene_df(df,cpm_cutoff=1,overall_cutoff=70):
+    ### Genes with CPM greater than one in over 70% of the total samples in both RNA-seq and ribosome profiling 
+    ### for either human or mouse were included in further analyses
     row_cut_off = int(overall_cutoff/100*len(df.columns))
     df_dummy = df[(df<cpm_cutoff).sum(axis='columns') > row_cut_off]
     dummy_gene=df_dummy.index.to_series().rename("dummy_gene_series")
     return dummy_gene
 
 def combine_dummy_gene(dummy_gene,df):
+    ### We have summed the counts of all polyA genes that were filtered out and grouped them under 'others' in the count table.
     non_dummy=df[~df.index.isin(dummy_gene.index)]
     dummy_df=df[df.index.isin(dummy_gene.index)]
     dummy_result=pd.DataFrame(dummy_df.sum())
