@@ -4,8 +4,8 @@ import os
 
 workdir = os.path.dirname(os.path.realpath(__file__))
 sample_filter = lambda df: df
-ribo_dedup = False
-rna_seq_dedup = True
+ribo_dedup = False ###not allow winsorization method
+rna_seq_dedup = True ###allow winsorization method
 
 def process_coverage_fn(coverage, gene, ribo):
     boundary_lookup = get_cds_range_lookup(ribo)
